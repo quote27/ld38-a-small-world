@@ -1,7 +1,7 @@
 CXX = clang
 CFLAGS = -Wall -g
 LIBS = -lstdc++
-SRC = main.cpp
+SRC = main.cpp state.cpp
 BIN = smallworld
 
 all:

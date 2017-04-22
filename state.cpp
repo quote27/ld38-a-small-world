@@ -57,7 +57,7 @@ void State::release() {
     }
 }
 
-void State::keydown(SDL_Keycode sym, SDL_Keymod mod, Uint16 unicode) {
+void State::keydown(SDL_Keycode sym, uint16_t mod) {
     switch(sym) {
         case SDLK_z: tap(); break;
         case SDLK_q: _game_state = QUIT; break;

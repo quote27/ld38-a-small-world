@@ -11,5 +11,5 @@ extern game_state_t _game_state;
 static const float gravity = .25;
 static const float epsilon = 1e-6;
 
-#include "state.hpp"
+class State;
 extern State state;

@@ -1,9 +1,17 @@
 // sample from https://wiki.libsdl.org/SDL_RenderCopy
-#include "SDL2/SDL.h"
 #include "globals.hpp"
 #include "state.hpp"
 
 game_state_t _game_state;
+State state;
+
+void handle_event(SDL_Event *e) {
+	switch(e->type) {
+		case SDL_KEYDOWN: { state.keydown(e->key.keysym.sym, e->key.keysym.mod);  break; }
+		// case SDL_KEYUP: { state.keyup(e->key.keysym.sym, e->key.keysym.mod, e->key.keysym.scancode); break; }
+		case SDL_QUIT: _game_state = QUIT;
+	}
+}
 
 int main(int argc, char *argv[])
 {
@@ -59,11 +67,13 @@ int main(int argc, char *argv[])
 
     SDL_Event event;
     int t_start;
-    while(true) {
+    while(_game_state != QUIT) {
         t_start = SDL_GetTicks();
 
-        SDL_PollEvent(&event);
-        if(event.type == SDL_QUIT)
+        while(SDL_PollEvent(&event))
+            handle_event(&event);
+
+        if(_game_state == QUIT)
             break;
 
         {

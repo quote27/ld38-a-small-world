@@ -1,4 +1,5 @@
 #pragma once
+#include "globals.hpp"
 
 enum player_state {
     GROUND,
@@ -42,5 +43,5 @@ class State {
         void tap();
         void hold();
         void release();
-        void keydown(SDL_Keycode sym, SDL_Keymod mod, Uint16 unicode);
+        void keydown(SDL_Keycode sym, uint16_t mod);
 };
