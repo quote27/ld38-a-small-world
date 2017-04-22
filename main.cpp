@@ -1,5 +1,9 @@
 // sample from https://wiki.libsdl.org/SDL_RenderCopy
 #include "SDL2/SDL.h"
+#include "globals.hpp"
+#include "state.hpp"
+
+game_state_t _game_state;
 
 int main(int argc, char *argv[])
 {
