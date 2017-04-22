@@ -34,33 +34,23 @@ void State::update() {
 }
 
 void State::tap() {
-    switch(ps) {
-        case GROUND: ps = JUMP_1_START; break;
-        case JUMP_1: ps = JUMP_2_START; break;
+    switch(player_state) {
+        case GROUND: player_state = JUMP_1_START; break;
+        case JUMP_1: player_state = JUMP_2_START; break;
         default: {}
     }
 }
 
 void State::hold() {
-    switch(ps) {
-        case GROUND: ps = SLIDE; break;
-        case JUMP_1:
-        case JUMP_2: ps = HOVER; break;
-        default: {}
-    }
 }
+
 void State::release() {
-    switch(ps) {
-        case SLIDE: ps = GROUND; break;
-        case HOVER: ps = HOVER_FALL; break;
-        default: {}
-    }
 }
 
 void State::keydown(SDL_Keycode sym, uint16_t mod) {
     switch(sym) {
         case SDLK_z: tap(); break;
-        case SDLK_q: _game_state = QUIT; break;
+        case SDLK_q: _game_state = GAME_QUIT; break;
         default: {}
     }
 }
