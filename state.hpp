@@ -1,14 +1,6 @@
 #pragma once
 #include "globals.hpp"
 
-enum player_state_e {
-    GROUND,
-    JUMP_1_START,
-    JUMP_1,
-    JUMP_2_START,
-    JUMP_2,
-};
-
                                           // 200ms is threshold for 'tap'
 const static unsigned tap_threshold = 11; // 10 frames * 16ms/frame
 enum keypress_length { NONE, TAP, HOLD };

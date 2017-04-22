@@ -1,9 +1,18 @@
 #pragma once
 #include "globals.hpp"
+#include "entity.hpp"
 
 class SpriteSheet;
 
-class Player {
+enum player_state_e {
+    GROUND,
+    JUMP_1_START,
+    JUMP_1,
+    JUMP_2_START,
+    JUMP_2,
+};
+
+class Player : public Entity {
     public:
         float x, y;
         float xv, yv;
