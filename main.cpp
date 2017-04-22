@@ -1,6 +1,7 @@
 // sample from https://wiki.libsdl.org/SDL_RenderCopy
 #include "globals.hpp"
 #include "state.hpp"
+#include "spritesheet.hpp"
 
 game_state_t _game_state;
 State state;
@@ -8,7 +9,6 @@ State state;
 void handle_event(SDL_Event *e) {
 	switch(e->type) {
 		case SDL_KEYDOWN: { state.keydown(e->key.keysym.sym, e->key.keysym.mod);  break; }
-		// case SDL_KEYUP: { state.keyup(e->key.keysym.sym, e->key.keysym.mod, e->key.keysym.scancode); break; }
 		case SDL_QUIT: _game_state = QUIT;
 	}
 }
@@ -31,6 +31,8 @@ int main(int argc, char *argv[])
     // init window and renderer
     window = SDL_CreateWindow("a small world", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 360, 240, 0);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    // SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    SpriteSheet* spritesheet = new SpriteSheet(renderer, "spritesheet.png");
 
     // setup background
     background_map_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 720, 480);
@@ -40,15 +42,14 @@ int main(int argc, char *argv[])
     SDL_SetRenderTarget(renderer, NULL);
 
     // setup player - white square with black outline
-    const int player_height = 60;
-    const int player_width = 40;
+    const int player_height = 80;
+    const int player_width = 80;
 
     player_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, player_height, player_width);
+    SDL_SetTextureBlendMode(player_tex, SDL_BLENDMODE_BLEND);
     SDL_SetRenderTarget(renderer, player_tex);
-    SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xff);
+    SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
     SDL_RenderClear(renderer);
-    SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, 0xff);
-    SDL_RenderDrawRect(renderer, NULL); // draws a white outline
     SDL_SetRenderTarget(renderer, NULL);
 
     // this is where we draw everything to, which will eventually be scaled to the full screen
@@ -89,6 +90,7 @@ int main(int argc, char *argv[])
             player_anim_rect.y -= (anim_counter % anim_frames); // 0 x 0 is top left
             SDL_RenderCopy(renderer, background_map_tex, NULL, NULL);
             SDL_RenderCopy(renderer, player_tex, NULL, &player_anim_rect);
+            spritesheet->render(19, player_anim_rect);
 
             SDL_SetRenderTarget(renderer, NULL);
             SDL_RenderCopy(renderer, merged_tex, NULL, NULL);
