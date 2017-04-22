@@ -9,7 +9,7 @@ void handle_event(SDL_Event *e) {
 	switch(e->type) {
 		case SDL_KEYDOWN: { state.keydown(e->key.keysym.sym, e->key.keysym.mod);  break; }
 		// case SDL_KEYUP: { state.keyup(e->key.keysym.sym, e->key.keysym.mod, e->key.keysym.scancode); break; }
-		case SDL_QUIT: _game_state = QUIT;
+		case SDL_QUIT: _game_state = GAME_QUIT;
 	}
 }
 
@@ -67,13 +67,13 @@ int main(int argc, char *argv[])
 
     SDL_Event event;
     int t_start;
-    while(_game_state != QUIT) {
+    while(_game_state != GAME_QUIT) {
         t_start = SDL_GetTicks();
 
         while(SDL_PollEvent(&event))
             handle_event(&event);
 
-        if(_game_state == QUIT)
+        if(_game_state == GAME_QUIT)
             break;
 
         {

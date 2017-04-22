@@ -1,15 +1,12 @@
 #pragma once
 #include "globals.hpp"
 
-enum player_state {
+enum player_state_e {
     GROUND,
     JUMP_1_START,
     JUMP_1,
     JUMP_2_START,
     JUMP_2,
-    SLIDE,
-    HOVER,
-    HOVER_FALL
 };
 
                                           // 200ms is threshold for 'tap'
@@ -28,7 +25,7 @@ struct fps_t {
 class State {
     public:
         fps_t fps;
-        player_state ps;
+        player_state_e player_state;
         bool button_pressed;
         // Count num of frames to move between 'tap' and 'hold' modes.
         unsigned button_count;
