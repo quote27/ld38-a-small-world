@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
     merged_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
             SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    Player player(100, 200, renderer);
+    Player player(100, 0, renderer);
 
     SDL_Event event;
     int frame_counter = 0;
@@ -95,7 +95,11 @@ int main(int argc, char *argv[])
             player.draw(renderer);
 
             SDL_SetRenderTarget(renderer, NULL);
-            SDL_RenderCopy(renderer, merged_tex, NULL, NULL);
+            //SDL_RenderCopy(renderer, merged_tex, NULL, NULL);
+            // TODO: if we do this, we can pretend that the bottom left is 0,0
+            // however we'll have to flip all the sprites as we render them
+            // this might be ok as spritesheet will handle that
+            SDL_RenderCopyEx(renderer, merged_tex, NULL, NULL, 0.0, NULL, SDL_FLIP_VERTICAL);
             SDL_RenderPresent(renderer);
         }
 
