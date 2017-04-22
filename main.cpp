@@ -2,6 +2,16 @@
 #include "SDL2/SDL.h"
 #define SHAPE_SIZE 16
 
+bool init() {
+
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't initialize SDL: %s", SDL_GetError());
+        return false;
+    }
+
+    return true;
+}
+
 int main(int argc, char *argv[])
 {
   SDL_Window* Main_Window;
@@ -39,9 +49,14 @@ int main(int argc, char *argv[])
   SDL_FreeSurface(Loading_Surf); /* we got the texture now -> free surface */
 
   /* Load an additional texture */
-  Loading_Surf = SDL_LoadBMP("Blueshapes.bmp");
   BlueShapes = SDL_CreateTextureFromSurface(Main_Renderer, Loading_Surf);
-  SDL_FreeSurface(Loading_Surf);
+  BlueShapes = SDL_CreateTexture(Main_Renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, SHAPE_SIZE, SHAPE_SIZE);
+
+  SDL_SetRenderTarget(Main_Renderer, BlueShapes);
+  SDL_SetRenderDrawColor(Main_Renderer, 0x00, 0x00, 0xff, 0xff);
+  SDL_RenderClear(Main_Renderer);
+
+  SDL_SetRenderTarget(Main_Renderer, NULL);
 
   /* now onto the fun part.
   This will render a rotating selection of the blue shapes
