@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
     merged_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
             SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    Player player(100, 0, renderer);
+    Player player(100, 0, renderer, spritesheet);
 
     SDL_Event event;
     int frame_counter = 0;

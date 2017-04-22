@@ -1,9 +1,10 @@
 #include "player.hpp"
 #include "state.hpp"
+#include "spritesheet.hpp"
 
-Player::Player(float x, float y, SDL_Renderer *renderer)
-    : x(x), y(y), xv(0.0f), yv(0.0f) {
-    sprite_id = 3;
+Player::Player(float x, float y, SDL_Renderer *renderer, SpriteSheet *spritesheet)
+    : x(x), y(y), xv(0.0f), yv(0.0f), spritesheet(spritesheet) {
+    sprite_id = 19;
 
     tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
             SDL_TEXTUREACCESS_TARGET, h, w);
@@ -42,5 +43,5 @@ void Player::draw(SDL_Renderer *renderer) {
     SDL_Rect r = {(int)x, (int)y, (int)w+1, (int)h};
 
     // this will call spritesheet->draw eventually
-    SDL_RenderCopy(renderer, tex, NULL, &r);
+    spritesheet->render(sprite_id, r);
 }

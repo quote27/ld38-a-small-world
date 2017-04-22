@@ -9,16 +9,16 @@ class Player {
         float xv, yv;
 
         static const int h = 40;
-        static const int w = 20;
+        static const int w = 40;
 
         int sprite_id;
-        const SpriteSheet *sheet;
+        SpriteSheet *spritesheet;
 
         // these are temporary until spritesheet is done
         SDL_Texture *tex;
 
         // TODO: this takes in a shared_ptr<SpriteSheet>
-        Player(float x, float y, SDL_Renderer *renderer);
+        Player(float x, float y, SDL_Renderer *renderer, SpriteSheet *spritesheet);
 
         void update();
 

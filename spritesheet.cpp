@@ -23,6 +23,5 @@ void SpriteSheet::render(uint32_t id, SDL_Rect destR) {
     buffer.y = (id / columns) * (buffer.h + margin) + margin;
 
     /* render the current animation step of our shape */
-    SDL_RenderCopy(renderer, texture, &buffer, &destR);
-    SDL_RenderPresent(renderer);
+    SDL_RenderCopyEx(renderer, texture, &buffer, &destR, 0.0, NULL, SDL_FLIP_VERTICAL);
 }
