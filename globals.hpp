@@ -1,11 +1,11 @@
 #pragma once
 #include <SDL2/SDL.h>
-#include <memory>
-
-using namespace std;
 
 static const uint32_t SCREEN_WIDTH = 360;
 static const uint32_t SCREEN_HEIGHT = 240;
+
+static const uint32_t WINDOW_WIDTH = 1280;
+static const uint32_t WINDOW_HEIGHT = 720;
 
 enum game_state_t {
     LOADING,

@@ -1,6 +1,7 @@
 // sample from https://wiki.libsdl.org/SDL_RenderCopy
 #include "globals.hpp"
 #include "state.hpp"
+#include "player.hpp"
 
 game_state_t _game_state;
 State state;
@@ -29,11 +30,13 @@ int main(int argc, char *argv[])
     SDL_Texture* merged_tex;
 
     // init window and renderer
-    window = SDL_CreateWindow("a small world", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 360, 240, 0);
+    window = SDL_CreateWindow("a small world", SDL_WINDOWPOS_UNDEFINED,
+            SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
     // setup background
-    background_map_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 720, 480);
+    background_map_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
+            SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
     SDL_SetRenderTarget(renderer, background_map_tex);
     SDL_SetRenderDrawColor(renderer, 0x00, 0x20, 0x88, 0xff);
     SDL_RenderClear(renderer);
@@ -43,7 +46,8 @@ int main(int argc, char *argv[])
     const int player_height = 60;
     const int player_width = 40;
 
-    player_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, player_height, player_width);
+    player_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
+            SDL_TEXTUREACCESS_TARGET, player_height, player_width);
     SDL_SetRenderTarget(renderer, player_tex);
     SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xff);
     SDL_RenderClear(renderer);
@@ -51,21 +55,15 @@ int main(int argc, char *argv[])
     SDL_RenderDrawRect(renderer, NULL); // draws a white outline
     SDL_SetRenderTarget(renderer, NULL);
 
-    // this is where we draw everything to, which will eventually be scaled to the full screen
-    // we will work in 360x240 pixel range
-    merged_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 360, 240);
+    // draw everything to a single texture, then have the renderer scale it to match
+    // the window size
+    merged_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
+            SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    SDL_Rect player_pos_rect;
-    player_pos_rect.h = player_height + 1; // dunno why i have to extend this by 1
-    player_pos_rect.w = player_width + 1;
-
-    player_pos_rect.y = 240 - player_height;
-    player_pos_rect.x = 130;
-
-    int anim_counter = 0;
-    const int anim_frames = 80;
+    Player player(100, 200, renderer);
 
     SDL_Event event;
+    int frame_counter = 0;
     int t_start;
     while(_game_state != GAME_QUIT) {
         t_start = SDL_GetTicks();
@@ -77,6 +75,12 @@ int main(int argc, char *argv[])
             break;
 
         {
+            // update
+            state.update();
+            player.update();
+        }
+
+        {
             // render
 
             // draw everything on merged_tex then copy to render buffer
@@ -84,11 +88,11 @@ int main(int argc, char *argv[])
             SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
             SDL_RenderClear(renderer);
 
-            SDL_Rect player_anim_rect = player_pos_rect;
-
-            player_anim_rect.y -= (anim_counter % anim_frames); // 0 x 0 is top left
+            // background first
             SDL_RenderCopy(renderer, background_map_tex, NULL, NULL);
-            SDL_RenderCopy(renderer, player_tex, NULL, &player_anim_rect);
+
+            // entities next
+            player.draw(renderer);
 
             SDL_SetRenderTarget(renderer, NULL);
             SDL_RenderCopy(renderer, merged_tex, NULL, NULL);
@@ -96,9 +100,8 @@ int main(int argc, char *argv[])
         }
 
         int32_t delay = 16 - (SDL_GetTicks() - t_start);
-        delay = (delay < 0) ? 0 : delay;
-        SDL_Delay(delay);
-        anim_counter++;
+        SDL_Delay(delay < 0 ? 0 : delay);
+        frame_counter++;
     }
 
     SDL_DestroyTexture(background_map_tex);

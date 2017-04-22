@@ -1,8 +1,18 @@
 #include "player.hpp"
 #include "state.hpp"
 
-Player::Player(float x, float y) : x(x), y(y), xv(0.0f), yv(0.0f) {
+Player::Player(float x, float y, SDL_Renderer *renderer)
+    : x(x), y(y), xv(0.0f), yv(0.0f) {
     sprite_id = 3;
+
+    tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
+            SDL_TEXTUREACCESS_TARGET, h, w);
+    SDL_SetRenderTarget(renderer, tex);
+    SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xff);
+    SDL_RenderClear(renderer);
+    SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, 0xff);
+    SDL_RenderDrawRect(renderer, NULL); // draws a white outline
+    SDL_SetRenderTarget(renderer, NULL);
 }
 
 void Player::update() {
@@ -27,6 +37,10 @@ void Player::update() {
     }
 }
 
-void draw() {
+void Player::draw(SDL_Renderer *renderer) {
+    // this assumes renderer is pointing to the correct target
+    SDL_Rect r = {(int)x, (int)y, (int)w+1, (int)h};
 
+    // this will call spritesheet->draw eventually
+    SDL_RenderCopy(renderer, tex, NULL, &r);
 }
