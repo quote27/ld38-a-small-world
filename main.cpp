@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
             SDL_RenderPresent(renderer);
         }
 
-        uint32_t delay = 16 - (SDL_GetTicks() - t_start);
+        int32_t delay = 16 - (SDL_GetTicks() - t_start);
         delay = (delay < 0) ? 0 : delay;
         SDL_Delay(delay);
         anim_counter++;
