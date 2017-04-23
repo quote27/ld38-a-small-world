@@ -2,7 +2,8 @@
 #include "state.hpp"
 #include "spritesheet.hpp"
 
-Player::Player(float _x, float _y, SpriteSheet *_spritesheet) {
+Player::Player(float _x, float _y, SpriteSheet *_spritesheet) :
+left_key(false), right_key(false), action_key(false) {
     x = _x;
     y = _y;
     xv = 0.0f;
@@ -20,13 +21,21 @@ void Player::jump() {
 }
 
 void Player::handle_event(SDL_Event *event) {
-    if(event->type != SDL_KEYDOWN)
-        return;
-
-    switch(event->key.keysym.sym) {
-        case SDLK_z:
-        case SDLK_SPACE: jump(); break;
-        default: {}
+    if(event->type == SDL_KEYDOWN || event->type == SDL_KEYUP) {
+        bool keydown = event->type == SDL_KEYDOWN;
+        switch(event->key.keysym.sym) {
+            case SDLK_z:
+            case SDLK_SPACE:
+                {
+                    if(keydown)
+                        jump();
+                    break;
+                }
+            case SDLK_RIGHT: right_key = keydown; break;
+            case SDLK_LEFT: left_key = keydown; break;
+            case SDLK_x: action_key = keydown; break;
+            default: {}
+        }
     }
 }
 
@@ -43,6 +52,7 @@ void Player::update() {
                      }
         default: {}
     }
+
     if(player_state == JUMP_1_START) {
         player_state = JUMP_1;
     } else if(player_state == JUMP_2_START) {
@@ -51,4 +61,13 @@ void Player::update() {
         player_state = GROUND;
         y = 0;
     }
+
+    if(right_key && !left_key) {
+        xv = 1;
+    } else if(left_key && !right_key) {
+        xv = -1;
+    } else {
+        xv = 0;
+    }
+    x += xv * state.fps.speed;
 }

@@ -23,4 +23,9 @@ public:
     void update() final;
 
     void jump();
+private:
+
+    bool left_key;
+    bool right_key;
+    bool action_key;
 };
