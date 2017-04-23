@@ -1,5 +1,14 @@
 #include "entity.hpp"
 
+void Entity::init(float _x, float _y, float _xv, float _yv, int _sprite_id, bool _blocking) {
+    x = _x;
+    y = _y;
+    xv = _xv;
+    yv = _yv;
+    sprite_id = _sprite_id;
+    blocking = _blocking;
+}
+
 void Entity::draw() const {
     SDL_Rect r = {(int)x, (int)y, (int)w, (int)h};
     if(spritesheet) {
@@ -8,11 +17,6 @@ void Entity::draw() const {
 }
 
 bool Entity::collide(const Entity *other) const {
-    if(!(collideable && other->collideable)) {
-        return false;
-    }
-
-    // compare bounding boxes
     return !(other->x > this->x + this->w
             || other->x + other->w < this->x
             || other->y + other->h < this->y

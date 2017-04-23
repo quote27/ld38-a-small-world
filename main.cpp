@@ -61,10 +61,13 @@ int main(int argc, char *argv[])
     merged_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
             SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    Player player(100, 0, spritesheet);
-    Camera camera(renderer, &player, merged_tex, 360, 640);
+    Player player(400, 0, spritesheet);
+    //Camera camera(renderer, &player, merged_tex, 360, 640);
 
-    Interactable bug(200, 20, spritesheet, 321, true);
+    Interactable bug(500, 20, spritesheet, 321, true);
+    Interactable freeze_camera(200, 0, spritesheet, 321, false);
+
+    Camera camera(renderer, &freeze_camera, merged_tex, 360, 640);
 
 
     SDL_Event event;
@@ -84,8 +87,16 @@ int main(int argc, char *argv[])
         {
             // update
             state.update();
+
+            // loop through entities and compute their updates
             player.update();
             bug.update();
+
+            // loop through relevant entities and see if there are collisions
+            //   if collide, undo pos/vel changes
+            if(bug.blocking && player.collide(&bug)) {
+                player.undo();
+            }
         }
 
         {
