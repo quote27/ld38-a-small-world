@@ -5,6 +5,7 @@
 #include "spritesheet.hpp"
 #include "player.hpp"
 #include "map.hpp"
+#include "camera.hpp"
 
 game_state_t _game_state;
 State state;
@@ -60,6 +61,7 @@ int main(int argc, char *argv[])
             SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
 
     Player player(100, 0, spritesheet);
+    Camera camera(renderer, &player, merged_tex, 360, 640);
 
     SDL_Event event;
     int frame_counter = 0;
@@ -95,13 +97,7 @@ int main(int argc, char *argv[])
             // entities next
             map->draw();
             player.draw();
-            SDL_SetRenderTarget(renderer, NULL);
-            //SDL_RenderCopy(renderer, merged_tex, NULL, NULL);
-            // TODO: if we do this, we can pretend that the bottom left is 0,0
-            // however we'll have to flip all the sprites as we render them
-            // this might be ok as spritesheet will handle that
-            SDL_RenderCopyEx(renderer, merged_tex, NULL, NULL, 0.0, NULL, SDL_FLIP_VERTICAL);
-            SDL_RenderPresent(renderer);
+            camera.draw(); // Always last.
         }
 
         int32_t delay = 16 - (SDL_GetTicks() - t_start);
