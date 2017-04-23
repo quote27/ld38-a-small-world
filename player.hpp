@@ -18,6 +18,8 @@ public:
 
     void handle_event(SDL_Event *event) final;
     bool update() final;
+    void undo();
+    void resolve_collision(const Entity *other);
 
     void jump();
 private:
@@ -25,4 +27,9 @@ private:
     bool left_key;
     bool right_key;
     bool action_key;
+
+    float old_x;
+    float old_y;
+    float old_xv;
+    float old_yv;
 };

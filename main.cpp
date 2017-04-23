@@ -57,8 +57,7 @@ int main(int argc, char *argv[])
 
     Player player(100, 0, spritesheet);
     Camera camera(renderer, &player, map, 360, 640);
-
-    Interactable bug(200, 20, spritesheet, 321, true);
+    Interactable bug(500, 20, spritesheet, 321, true);
 
 
     SDL_Event event;
@@ -78,8 +77,16 @@ int main(int argc, char *argv[])
         {
             // update
             state.update();
+
+            // loop through entities and compute their updates
             player.update();
             bug.update();
+
+            // loop through relevant entities and see if there are collisions
+            //   if collide, undo pos/vel changes
+            if(bug.blocking && player.collide(&bug)) {
+                player.undo();
+            }
         }
 
         {   // render
