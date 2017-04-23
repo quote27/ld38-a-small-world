@@ -22,6 +22,7 @@ public:
     virtual bool collide(const Entity *other) const;
     virtual void draw() const;
     virtual void undo() = 0;
+    virtual void resolve_collision(const Entity *other) = 0;
 
     Entity(const SpriteSheet *spritesheet) : x(0.0f), y(0.0f), xv(0.0f), yv(0.0f),
            sprite_id(BLANK), spritesheet(spritesheet), blocking(false) {}

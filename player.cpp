@@ -63,9 +63,9 @@ bool Player::update() {
     }
 
     if(right_key && !left_key) {
-        xv = 1.0f;
+        xv = 2.0f;
     } else if(left_key && !right_key) {
-        xv = -1.0f;
+        xv = -2.0f;
     } else {
         xv = 0.0f;
     }
@@ -79,4 +79,8 @@ void Player::undo() {
     y = old_y;
     xv = old_xv;
     yv = old_yv;
+}
+
+void Player::resolve_collision(const Entity *other) {
+
 }

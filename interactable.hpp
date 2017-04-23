@@ -10,5 +10,6 @@ public:
 
     void handle_event(SDL_Event *event) final;
     bool update() final;
-    void undo();
+    void undo() final;
+    void resolve_collision(const Entity *other) final;
 };

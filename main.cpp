@@ -100,14 +100,6 @@ int main(int argc, char *argv[])
         }
 
         {
-            if(player.collide(&bug)) {
-                printf("player is hitting the bug\n");
-            } else {
-                printf("player isn't hitting anything\n");
-            }
-        }
-
-        {
             // render
 
             // draw everything on merged_tex then copy to render buffer

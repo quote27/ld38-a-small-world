@@ -1,6 +1,5 @@
 #include "entity.hpp"
 
-
 void Entity::init(float _x, float _y, float _xv, float _yv, int _sprite_id, bool _blocking) {
     x = _x;
     y = _y;
