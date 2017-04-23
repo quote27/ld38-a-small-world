@@ -6,11 +6,16 @@ class Camera {
   private:
     SDL_Renderer *renderer;
     Entity *target;
-    SDL_Texture *viewport;
+    Map *map;
   public:
+    int x;
+    int y;
     int h;
     int w;
-    Camera(SDL_Renderer *renderer, Entity *target, SDL_Texture *viewport, int h, int w);
+    SDL_Texture *viewport;
+
+    Camera(SDL_Renderer *renderer, Entity *target, Map *map, int h, int w);
+    ~Camera();
 
     void draw();
 };

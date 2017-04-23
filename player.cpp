@@ -31,7 +31,9 @@ void Player::handle_event(SDL_Event *event) {
                         jump();
                     break;
                 }
+            case SDLK_d:
             case SDLK_RIGHT: right_key = keydown; break;
+            case SDLK_a:
             case SDLK_LEFT: left_key = keydown; break;
             case SDLK_x: action_key = keydown; break;
             default: {}
@@ -66,9 +68,9 @@ bool Player::update() {
     }
 
     if(right_key && !left_key) {
-        xv = 1.0f;
+        xv = 2.0f;
     } else if(left_key && !right_key) {
-        xv = -1.0f;
+        xv = -2.0f;
     } else {
         xv = 0.0f;
     }

@@ -7,10 +7,10 @@ Map::Map(SDL_Renderer *renderer, const SpriteSheet *spritesheet, int rows, int c
     spritesheet(spritesheet)
 {
     tiles = std::vector<std::vector<int>>(rows, std::vector<int>(columns, BLANK));
+    height = rows * spritesheet->cheight;
+    width = columns * spritesheet->cwidth;
     texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
-            SDL_TEXTUREACCESS_TARGET,
-            columns * spritesheet->cwidth,
-            rows * spritesheet->cheight);
+                                SDL_TEXTUREACCESS_TARGET, width, height);
     SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
     compose();
 };

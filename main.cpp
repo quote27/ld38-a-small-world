@@ -24,7 +24,6 @@ int main(int argc, char *argv[])
     SDL_Renderer* renderer;
     SDL_Texture* background_map_tex;
     SDL_Texture* player_tex;
-    SDL_Texture* merged_tex;
 
     // init window and renderer
     window = SDL_CreateWindow("a small world", SDL_WINDOWPOS_UNDEFINED,
@@ -56,13 +55,8 @@ int main(int argc, char *argv[])
     SDL_RenderClear(renderer);
     SDL_SetRenderTarget(renderer, NULL);
 
-    // draw everything to a single texture, then have the renderer scale it to match
-    // the window size
-    merged_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
-            SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
-
     Player player(100, 0, spritesheet);
-    Camera camera(renderer, &player, merged_tex, 360, 640);
+    Camera camera(renderer, &player, map, 360, 640);
 
     Interactable bug(200, 20, spritesheet, 321, true);
 
@@ -88,11 +82,9 @@ int main(int argc, char *argv[])
             bug.update();
         }
 
-        {
-            // render
-
-            // draw everything on merged_tex then copy to render buffer
-            SDL_SetRenderTarget(renderer, merged_tex);
+        {   // render
+            // draw everything on camera viewport then copy to render buffer
+            SDL_SetRenderTarget(renderer, camera.viewport);
             SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
             SDL_RenderClear(renderer);
 
@@ -113,7 +105,6 @@ int main(int argc, char *argv[])
 
     SDL_DestroyTexture(background_map_tex);
     SDL_DestroyTexture(player_tex);
-    SDL_DestroyTexture(merged_tex);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
