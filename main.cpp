@@ -1,4 +1,4 @@
-// sample from https://wiki.libsdl.org/SDL_RenderCopy
+// started with sample from https://wiki.libsdl.org/SDL_RenderCopy
 #include "globals.hpp"
 #include "state.hpp"
 #include "spritesheet.hpp"
