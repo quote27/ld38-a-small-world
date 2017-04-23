@@ -13,44 +13,24 @@ void fps_t::update() {
     frames++;
 }
 
-State::State() {
-    //set everything to 0
-    button_pressed = false;
-    button_count = 0;
-    button_state = NONE;
-    frame = 0;
-    hold_time = 0;
-}
+State::State() { }
 
 void State::update() {
     fps.update();
-    if(button_pressed) {
-        if(++button_count > tap_threshold) {
-            button_state = HOLD;
-            hold();
-        }
-    }
-    frame++;
 }
 
-void State::tap() {
-    switch(player_state) {
-        case GROUND: player_state = JUMP_1_START; break;
-        case JUMP_1: player_state = JUMP_2_START; break;
+void State::handle_event(SDL_Event *event) {
+    switch(event->type) {
+        case SDL_KEYDOWN:
+            {
+                switch(event->key.keysym.sym) {
+                    case SDLK_q: _game_state = GAME_QUIT; break;
+                    default: {}
+                }
+                break;
+            }
+        case SDL_QUIT: _game_state = GAME_QUIT; break;
         default: {}
     }
-}
 
-void State::hold() {
-}
-
-void State::release() {
-}
-
-void State::keydown(SDL_Keycode sym, uint16_t mod) {
-    switch(sym) {
-        case SDLK_z: tap(); break;
-        case SDLK_q: _game_state = GAME_QUIT; break;
-        default: {}
-    }
 }

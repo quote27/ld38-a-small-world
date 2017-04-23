@@ -1,18 +1,6 @@
 #pragma once
 #include "globals.hpp"
 
-enum player_state_e {
-    GROUND,
-    JUMP_1_START,
-    JUMP_1,
-    JUMP_2_START,
-    JUMP_2,
-};
-
-                                          // 200ms is threshold for 'tap'
-const static unsigned tap_threshold = 11; // 10 frames * 16ms/frame
-enum keypress_length { NONE, TAP, HOLD };
-
 // Taken from sdl tutorial.
 struct fps_t {
     int old, last, fps, frames;
@@ -25,20 +13,9 @@ struct fps_t {
 class State {
     public:
         fps_t fps;
-        player_state_e player_state;
-        bool button_pressed;
-        // Count num of frames to move between 'tap' and 'hold' modes.
-        unsigned button_count;
-        keypress_length button_state;
-        long long frame;
-        int hold_time;
 
         State();
 
         void update();
-        bool active_frame();
-        void tap();
-        void hold();
-        void release();
-        void keydown(SDL_Keycode sym, uint16_t mod);
+        void handle_event(SDL_Event *event);
 };

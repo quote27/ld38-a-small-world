@@ -7,14 +7,6 @@
 game_state_t _game_state;
 State state;
 
-void handle_event(SDL_Event *e) {
-	switch(e->type) {
-		case SDL_KEYDOWN: { state.keydown(e->key.keysym.sym, e->key.keysym.mod);  break; }
-		// case SDL_KEYUP: { state.keyup(e->key.keysym.sym, e->key.keysym.mod, e->key.keysym.scancode); break; }
-		case SDL_QUIT: _game_state = GAME_QUIT;
-	}
-}
-
 int main(int argc, char *argv[])
 {
 
@@ -62,7 +54,7 @@ int main(int argc, char *argv[])
     merged_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
             SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    Player player(100, 0, renderer, spritesheet);
+    Player player(100, 0, spritesheet);
 
     SDL_Event event;
     int frame_counter = 0;
@@ -70,8 +62,10 @@ int main(int argc, char *argv[])
     while(_game_state != GAME_QUIT) {
         t_start = SDL_GetTicks();
 
-        while(SDL_PollEvent(&event))
-            handle_event(&event);
+        while(SDL_PollEvent(&event)) {
+            state.handle_event(&event);
+            player.handle_event(&event);
+        }
 
         if(_game_state == GAME_QUIT)
             break;
@@ -94,7 +88,7 @@ int main(int argc, char *argv[])
             SDL_RenderCopy(renderer, background_map_tex, NULL, NULL);
 
             // entities next
-            player.draw(renderer);
+            player.draw();
 
             SDL_SetRenderTarget(renderer, NULL);
             //SDL_RenderCopy(renderer, merged_tex, NULL, NULL);
