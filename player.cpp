@@ -2,22 +2,44 @@
 #include "state.hpp"
 #include "spritesheet.hpp"
 
-Player::Player(float x, float y, SDL_Renderer *renderer, const SpriteSheet *spritesheet)
-    : x(x), y(y), xv(0.0f), yv(0.0f), spritesheet(spritesheet) {
+Player::Player(float _x, float _y, const SpriteSheet *_spritesheet) :
+Entity(_spritesheet), left_key(false), right_key(false), action_key(false) {
+    x = _x;
+    y = _y;
+    xv = 0.0f;
+    yv = 0.0f;
     sprite_id = 19;
+}
 
-    tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
-            SDL_TEXTUREACCESS_TARGET, h, w);
-    SDL_SetRenderTarget(renderer, tex);
-    SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xff);
-    SDL_RenderClear(renderer);
-    SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, 0xff);
-    SDL_RenderDrawRect(renderer, NULL); // draws a white outline
-    SDL_SetRenderTarget(renderer, NULL);
+void Player::jump() {
+    switch(player_state) {
+        case GROUND: player_state = JUMP_1_START; break;
+        case JUMP_1: player_state = JUMP_2_START; break;
+        default: {}
+    }
+}
+
+void Player::handle_event(SDL_Event *event) {
+    if(event->type == SDL_KEYDOWN || event->type == SDL_KEYUP) {
+        bool keydown = event->type == SDL_KEYDOWN;
+        switch(event->key.keysym.sym) {
+            case SDLK_z:
+            case SDLK_SPACE:
+                {
+                    if(keydown)
+                        jump();
+                    break;
+                }
+            case SDLK_RIGHT: right_key = keydown; break;
+            case SDLK_LEFT: left_key = keydown; break;
+            case SDLK_x: action_key = keydown; break;
+            default: {}
+        }
+    }
 }
 
 void Player::update() {
-    switch(state.player_state) {
+    switch(player_state) {
         case GROUND: yv = 0; break; //do nothing, y-axis doesnt change - TODO: animation change
         case JUMP_2_START:
         case JUMP_1_START: yv = 4; break; //vel[1] = 1; break; //add 'jump' to velocity
@@ -27,21 +49,24 @@ void Player::update() {
                          y += yv * state.fps.speed;
                          break;
                      }
+        default: {}
     }
-    if(state.player_state == JUMP_1_START) {
-        state.player_state = JUMP_1;
-    } else if(state.player_state == JUMP_2_START) {
-        state.player_state = JUMP_2;
+
+    if(player_state == JUMP_1_START) {
+        player_state = JUMP_1;
+    } else if(player_state == JUMP_2_START) {
+        player_state = JUMP_2;
     } else if(y <= 0) {
-        state.player_state = GROUND;
+        player_state = GROUND;
         y = 0;
     }
-}
 
-void Player::draw(SDL_Renderer *renderer) {
-    // this assumes renderer is pointing to the correct target
-    SDL_Rect r = {(int)x, (int)y, (int)w+1, (int)h};
-
-    // this will call spritesheet->draw eventually
-    spritesheet->render(sprite_id, r);
+    if(right_key && !left_key) {
+        xv = 1;
+    } else if(left_key && !right_key) {
+        xv = -1;
+    } else {
+        xv = 0;
+    }
+    x += xv * state.fps.speed;
 }

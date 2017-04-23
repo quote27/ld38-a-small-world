@@ -1,7 +1,7 @@
 CXX = clang
 CFLAGS = -Wall -g --std=c++1z
 LIBS = -lstdc++ -lSDL2_image
-SRC = main.cpp state.cpp spritesheet.cpp player.cpp map.cpp
+SRC = main.cpp state.cpp spritesheet.cpp player.cpp map.cpp entity.cpp
 BIN = smallworld
 
 all:
