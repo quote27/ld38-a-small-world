@@ -10,4 +10,5 @@ public:
 
     void handle_event(SDL_Event *event) final;
     bool update() final;
+    void undo();
 };
