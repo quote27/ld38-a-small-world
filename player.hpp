@@ -12,15 +12,12 @@ enum player_state_e {
 
 class Player : public Entity {
 public:
-    static const int h = 40;
-    static const int w = 40;
-
     player_state_e player_state;
 
     Player(float x, float y, const SpriteSheet *spritesheet);
 
     void handle_event(SDL_Event *event) final;
-    void update() final;
+    bool update() final;
 
     void jump();
 private:

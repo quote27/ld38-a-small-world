@@ -6,6 +6,7 @@
 #include "player.hpp"
 #include "map.hpp"
 #include "camera.hpp"
+#include "interactable.hpp"
 
 game_state_t _game_state;
 State state;
@@ -63,6 +64,9 @@ int main(int argc, char *argv[])
     Player player(100, 0, spritesheet);
     Camera camera(renderer, &player, merged_tex, 360, 640);
 
+    Interactable bug(200, 20, spritesheet, 321, true);
+
+
     SDL_Event event;
     int frame_counter = 0;
     int t_start;
@@ -81,6 +85,7 @@ int main(int argc, char *argv[])
             // update
             state.update();
             player.update();
+            bug.update();
         }
 
         {
@@ -97,6 +102,7 @@ int main(int argc, char *argv[])
             // entities next
             map->draw();
             player.draw();
+            bug.draw();
             camera.draw(); // Always last.
         }
 

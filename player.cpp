@@ -9,6 +9,7 @@ Entity(_spritesheet), left_key(false), right_key(false), action_key(false) {
     xv = 0.0f;
     yv = 0.0f;
     sprite_id = 19;
+    collideable = true;
 }
 
 void Player::jump() {
@@ -38,7 +39,10 @@ void Player::handle_event(SDL_Event *event) {
     }
 }
 
-void Player::update() {
+bool Player::update() {
+    const int old_y = y;
+    const int old_x = x;
+
     switch(player_state) {
         case GROUND: yv = 0; break; //do nothing, y-axis doesnt change - TODO: animation change
         case JUMP_2_START:
@@ -56,17 +60,19 @@ void Player::update() {
         player_state = JUMP_1;
     } else if(player_state == JUMP_2_START) {
         player_state = JUMP_2;
-    } else if(y <= 0) {
+    } else if(y <= 0.0f) {
         player_state = GROUND;
-        y = 0;
+        y = 0.0f;
     }
 
     if(right_key && !left_key) {
-        xv = 1;
+        xv = 1.0f;
     } else if(left_key && !right_key) {
-        xv = -1;
+        xv = -1.0f;
     } else {
-        xv = 0;
+        xv = 0.0f;
     }
     x += xv * state.fps.speed;
+
+    return old_x != (int)x || old_y != (int)y;
 }
