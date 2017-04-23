@@ -1,8 +1,10 @@
 // sample from https://wiki.libsdl.org/SDL_RenderCopy
+#include<vector>
 #include "globals.hpp"
 #include "state.hpp"
 #include "spritesheet.hpp"
 #include "player.hpp"
+#include "map.hpp"
 
 game_state_t _game_state;
 State state;
@@ -35,7 +37,10 @@ int main(int argc, char *argv[])
             SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     // SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-    SpriteSheet* spritesheet = new SpriteSheet(renderer, "spritesheet.png");
+    const SpriteSheet* spritesheet = new SpriteSheet(renderer, "spritesheet.png");
+    Map* map = new Map(renderer, spritesheet, 18, 32);
+    map->tiles[0] = std::vector<int>(map->tiles[0].size(), 123);
+    map->compose();
 
     // setup background
     background_map_tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
@@ -94,6 +99,7 @@ int main(int argc, char *argv[])
             SDL_RenderCopy(renderer, background_map_tex, NULL, NULL);
 
             // entities next
+            map->draw();
             player.draw(renderer);
 
             SDL_SetRenderTarget(renderer, NULL);

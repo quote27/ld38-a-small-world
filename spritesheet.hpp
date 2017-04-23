@@ -1,4 +1,6 @@
+#pragma once
 #include "globals.hpp"
+// TODO: const correctness.
 
 class SpriteSheet {
   public:
@@ -6,11 +8,15 @@ class SpriteSheet {
     SDL_Texture* texture;
     int rows;
     int columns;
-    uint32_t margin;
+    int cheight;
+    int cwidth;
+    uint32_t cmargin;
 
-    SpriteSheet(SDL_Renderer* _renderer, const char* file_path, uint32_t _margin = 2);
-    void render(uint32_t id, SDL_Rect dest);
+    SpriteSheet(SDL_Renderer* renderer, const char* file_path,
+                int cheight=21, int cwidth=21, uint32_t cmargin = 2);
+    void render(uint32_t id, SDL_Rect dest) const;
+};
 
-  private:
-    SDL_Rect buffer;
+enum ESprite {
+    BLANK = 839
 };

@@ -2,7 +2,7 @@
 #include "state.hpp"
 #include "spritesheet.hpp"
 
-Player::Player(float x, float y, SDL_Renderer *renderer, SpriteSheet *spritesheet)
+Player::Player(float x, float y, SDL_Renderer *renderer, const SpriteSheet *spritesheet)
     : x(x), y(y), xv(0.0f), yv(0.0f), spritesheet(spritesheet) {
     sprite_id = 19;
 

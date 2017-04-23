@@ -12,13 +12,13 @@ class Player {
         static const int w = 40;
 
         int sprite_id;
-        SpriteSheet *spritesheet;
+        const SpriteSheet *spritesheet;
 
         // these are temporary until spritesheet is done
         SDL_Texture *tex;
 
         // TODO: this takes in a shared_ptr<SpriteSheet>
-        Player(float x, float y, SDL_Renderer *renderer, SpriteSheet *spritesheet);
+        Player(float x, float y, SDL_Renderer *renderer, const SpriteSheet *spritesheet);
 
         void update();
 
